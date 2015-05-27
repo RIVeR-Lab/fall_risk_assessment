@@ -4,6 +4,7 @@ project(kinect_image)
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
+find_package(OpenCV REQUIRED)
 find_package(catkin REQUIRED COMPONENTS
   cv_bridge
   image_transport
@@ -11,7 +12,7 @@ find_package(catkin REQUIRED COMPONENTS
   sensor_msgs
   std_msgs
 )
-
+include_directories(${OpenCV_INCLUDE_DIRS})
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
 
@@ -165,7 +166,7 @@ include_directories(
 # catkin_add_nosetests(test)
 
 add_executable(image_center_distance src/image_center_distance.cpp)
-target_link_libraries(image_center_distance ${catkin_LIBRARIES})
+target_link_libraries(image_center_distance ${catkin_LIBRARIES} ${OpenCV_LIBS})
 
 add_executable(image_reference_line src/image_reference_line.cpp)
-target_link_libraries(image_reference_line ${catkin_LIBRARIES})
+target_link_libraries(image_reference_line ${catkin_LIBRARIES} ${OpenCV_LIBS})
