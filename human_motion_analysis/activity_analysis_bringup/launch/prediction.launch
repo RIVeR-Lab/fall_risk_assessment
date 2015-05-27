@@ -1,0 +1,9 @@
+<launch>
+
+<include file="$(find openni_launch)/launch/openni.launch"/>
+<node name="activity_visualise" pkg="activity_visualise" type="activity_visualise"  />
+
+<node name="predict" pkg="activity_predict" type="predict.py"  />
+
+
+</launch>

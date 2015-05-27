@@ -5,22 +5,117 @@
 #include <tf/transform_broadcaster.h>
 #include <kdl/frames.hpp>
 
+#include <std_msgs/String.h>
+
 #include <XnOpenNI.h>
 #include <XnCodecIDs.h>
 #include <XnCppWrapper.h>
 
 using std::string;
 
+
+
+class openni_tracker{
+
 xn::Context        g_Context;
 xn::Player          g_Player;
 xn::DepthGenerator g_DepthGenerator;
 xn::UserGenerator  g_UserGenerator;
 
-XnBool g_bNeedPose   = FALSE;
-XnChar g_strPose[20] = "";
+
+XnBool g_bNeedPose;
+XnChar g_strPose[20];
+
+ros::NodeHandle nh_;
+XnStatus nRetVal;
+
+ros::Publisher calib_pub;
+
+
+
+
+
+openni_tracker(ros::NodeHandle& nh_){
+	calib_pub = nh_.advertise<std_msgs::String>("openni_tracker/calibration", 10);
+
+	XnBool g_bNeedPose   = FALSE;
+	XnChar g_strPose[20] = "";
+
+
+  string configFilename = ros::package::getPath("openni_tracker") + "/openni_tracker.xml";
+        nRetVal = g_Context.InitFromXmlFile(configFilename.c_str());
+        CHECK_RC(nRetVal, "InitFromXml");
+
+	    nRetVal = g_Context.FindExistingNode(XN_NODE_TYPE_DEPTH, g_DepthGenerator);
+    CHECK_RC(nRetVal, "Find depth generator");
+
+	nRetVal = g_Context.FindExistingNode(XN_NODE_TYPE_USER, g_UserGenerator);
+	if (nRetVal != XN_STATUS_OK) {
+		nRetVal = g_UserGenerator.Create(g_Context);
+	    if (nRetVal != XN_STATUS_OK) {
+		    ROS_ERROR("NITE is likely missing: Please install NITE >= 1.5.2.21. Check the readme for download information. Error Info: User generator failed: %s", xnGetStatusString(nRetVal));
+
+	    }
+	}
+
+	if (!g_UserGenerator.IsCapabilitySupported(XN_CAPABILITY_SKELETON)) {
+		ROS_INFO("Supplied user generator doesn't support skeleton");
+
+	}
+
+    XnCallbackHandle hUserCallbacks;
+	g_UserGenerator.RegisterUserCallbacks(User_NewUser, User_LostUser, NULL, hUserCallbacks);
+
+	XnCallbackHandle hCalibrationCallbacks;
+	g_UserGenerator.GetSkeletonCap().RegisterCalibrationCallbacks(UserCalibration_CalibrationStart, UserCalibration_CalibrationEnd, NULL, hCalibrationCallbacks);
+
+	if (g_UserGenerator.GetSkeletonCap().NeedPoseForCalibration()) {
+		g_bNeedPose = TRUE;
+		if (!g_UserGenerator.IsCapabilitySupported(XN_CAPABILITY_POSE_DETECTION)) {
+			ROS_INFO("Pose required, but not supported");
+		}
+
+		XnCallbackHandle hPoseCallbacks;
+		g_UserGenerator.GetPoseDetectionCap().RegisterToPoseCallbacks(UserPose_PoseDetected, NULL, NULL, hPoseCallbacks);
+
+		g_UserGenerator.GetSkeletonCap().GetCalibrationPose(g_strPose);
+	}
+
+	g_UserGenerator.GetSkeletonCap().SetSkeletonProfile(XN_SKEL_PROFILE_ALL);
+
+	nRetVal = g_Context.StartGeneratingAll();
+	CHECK_RC(nRetVal, "StartGenerating");
+
+	ros::Rate r(30);
+
+
+        ros::NodeHandle pnh("~");
+        string frame_id("openni_depth_frame");
+        pnh.getParam("camera_frame_id", frame_id);
+
+	while (ros::ok()) {
+		g_Context.WaitAndUpdateAll();
+		publishTransforms(frame_id);
+		r.sleep();
+	}
+
+	g_Context.Shutdown();
+
+}
+
+XnStatus CHECK_RC(XnStatus nRetVal, std::string what)			{
+	if (nRetVal != XN_STATUS_OK)
+	{
+		ROS_ERROR("%s failed: %s", what, xnGetStatusString(nRetVal));
+		return nRetVal;
+	}
+}
+
+
 
 void XN_CALLBACK_TYPE User_NewUser(xn::UserGenerator& generator, XnUserID nId, void* pCookie) {
 	ROS_INFO("New User %d", nId);
+	calib_pub("New User %d", nId);
 
 	if (g_bNeedPose)
 		g_UserGenerator.GetPoseDetectionCap().StartPoseDetection(g_strPose, nId);
@@ -127,87 +222,11 @@ void publishTransforms(const std::string& frame_id) {
     }
 }
 
-#define CHECK_RC(nRetVal, what)										\
-	if (nRetVal != XN_STATUS_OK)									\
-	{																\
-		ROS_ERROR("%s failed: %s", what, xnGetStatusString(nRetVal));\
-		return nRetVal;												\
-	}
 
+};
 int main(int argc, char **argv) {
     ros::init(argc, argv, "openni_tracker");
     ros::NodeHandle nh;
-    XnStatus nRetVal;
+		openni_tracker(nh);
 
-    if(argc==2){
-        nRetVal = g_Context.Init();
-        CHECK_RC(nRetVal, "Init");
-        nRetVal = g_Context.OpenFileRecording(argv[2], g_Player);
-        if (nRetVal != XN_STATUS_OK)
-        {
-        printf("Can't open recording %s\n", xnGetStatusString(nRetVal));
-        return 1;
-        }
-    }
-    else{
-        string configFilename = ros::package::getPath("openni_tracker") + "/openni_tracker.xml";
-        nRetVal = g_Context.InitFromXmlFile(configFilename.c_str());
-        CHECK_RC(nRetVal, "InitFromXml");
-    }
-    nRetVal = g_Context.FindExistingNode(XN_NODE_TYPE_DEPTH, g_DepthGenerator);
-    CHECK_RC(nRetVal, "Find depth generator");
-
-	nRetVal = g_Context.FindExistingNode(XN_NODE_TYPE_USER, g_UserGenerator);
-	if (nRetVal != XN_STATUS_OK) {
-		nRetVal = g_UserGenerator.Create(g_Context);
-	    if (nRetVal != XN_STATUS_OK) {
-		    ROS_ERROR("NITE is likely missing: Please install NITE >= 1.5.2.21. Check the readme for download information. Error Info: User generator failed: %s", xnGetStatusString(nRetVal));
-            return nRetVal;
-	    }
-	}
-
-	if (!g_UserGenerator.IsCapabilitySupported(XN_CAPABILITY_SKELETON)) {
-		ROS_INFO("Supplied user generator doesn't support skeleton");
-		return 1;
-	}
-
-    XnCallbackHandle hUserCallbacks;
-	g_UserGenerator.RegisterUserCallbacks(User_NewUser, User_LostUser, NULL, hUserCallbacks);
-
-	XnCallbackHandle hCalibrationCallbacks;
-	g_UserGenerator.GetSkeletonCap().RegisterCalibrationCallbacks(UserCalibration_CalibrationStart, UserCalibration_CalibrationEnd, NULL, hCalibrationCallbacks);
-
-	if (g_UserGenerator.GetSkeletonCap().NeedPoseForCalibration()) {
-		g_bNeedPose = TRUE;
-		if (!g_UserGenerator.IsCapabilitySupported(XN_CAPABILITY_POSE_DETECTION)) {
-			ROS_INFO("Pose required, but not supported");
-			return 1;
-		}
-
-		XnCallbackHandle hPoseCallbacks;
-		g_UserGenerator.GetPoseDetectionCap().RegisterToPoseCallbacks(UserPose_PoseDetected, NULL, NULL, hPoseCallbacks);
-
-		g_UserGenerator.GetSkeletonCap().GetCalibrationPose(g_strPose);
-	}
-
-	g_UserGenerator.GetSkeletonCap().SetSkeletonProfile(XN_SKEL_PROFILE_ALL);
-
-	nRetVal = g_Context.StartGeneratingAll();
-	CHECK_RC(nRetVal, "StartGenerating");
-
-	ros::Rate r(30);
-
-        
-        ros::NodeHandle pnh("~");
-        string frame_id("openni_depth_frame");
-        pnh.getParam("camera_frame_id", frame_id);
-                
-	while (ros::ok()) {
-		g_Context.WaitAndUpdateAll();
-		publishTransforms(frame_id);
-		r.sleep();
-	}
-
-	g_Context.Shutdown();
-	return 0;
 }
