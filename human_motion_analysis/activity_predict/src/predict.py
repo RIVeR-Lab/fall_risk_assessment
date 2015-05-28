@@ -4,7 +4,7 @@
 import rospy
 import rospkg
 import tf
-from std_msgs.msg import String
+from std_msgs.msg import Int8
 
 # scikit libs
 import numpy as np
@@ -58,7 +58,7 @@ if __name__ == '__main__':
 
 
 
-    pub = rospy.Publisher('activity_state', String, queue_size=10)
+    pub = rospy.Publisher('activity_state', Int8, queue_size=10)
     while not rospy.is_shutdown():
         try:
 
@@ -75,7 +75,7 @@ if __name__ == '__main__':
             if previousPose == currentPose['no']:
                 count += 1
                 if count > 3:
-                    pub.publish(currentPose['value'])
+                    pub.publish(currentPose['no'])
                     rospy.loginfo(currentPose['value'] +" is pusblished!")
 
             previousPose = currentPose['no']
