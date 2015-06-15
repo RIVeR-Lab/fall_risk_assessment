@@ -15,11 +15,12 @@ int main(int argc, char **argv)
 
   ros::init(argc, argv, "collect");
   ros::NodeHandle n;
-  rosbag::Bag bag("/home/turtlebot/skelData/test.bag", rosbag::bagmode::write);
+  rosbag::Bag bag;
+  bag.open("test.bag", rosbag::bagmode::Write);
   ros::Rate loop_rate(10);
 
   ros::Publisher activity_pub = n.advertise<std_msgs::String>("skeleton_data", 1000);
-  ros::Subscriber rgb_sub = n.subscribe("chatter", 1000, activityCallback);
+  ros::Subscriber rgb_sub = n.subscribe("/camera/rgb/image_raw", 1000, activityCallback);
 
   tf::TransformListener listener;
   std::string openni_depth_frame;
@@ -61,7 +62,8 @@ int main(int argc, char **argv)
 
       msg.data = ss.str();
       activity_pub.publish(msg);
-
+      bag.write("legs", ros::Time::now(), msg);
+      bag.write("legs_rgb", ros::Time::now(), rgb_sub);
 
       ros::spinOnce();
       loop_rate.sleep();
