@@ -2,7 +2,6 @@
 
 
 <node name="openni_tracker" pkg="openni_tracker" type="openni_tracker" output="screen" required="true"/>
-<node name="collect" pkg="data_collect" type="collect"/>
 <node pkg="rosbag" name="record" type="record" args="-O skeleton.bag -o e1 /tf /camera/rgb/image_color" output="screen"/>
 
 </launch>
