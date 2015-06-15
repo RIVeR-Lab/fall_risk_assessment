@@ -4,6 +4,12 @@
 #include "rosbag/bag.h"
 #include <sstream>
 
+
+void activityCallback(const std_msgs::String::ConstPtr& msg)
+{
+    ROS_INFO("%s", msg->data.c_str());
+}
+
 int main(int argc, char **argv)
 {
 

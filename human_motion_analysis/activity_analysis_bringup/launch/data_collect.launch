@@ -1,0 +1,6 @@
+<launch>
+
+<node name="openni_tracker" pkg="openni_tracker" type="openni_tracker"  output="screen"/>
+<node name="collect" pkg="data_collect" type="data_collect"/>
+
+</launch>

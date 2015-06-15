@@ -7,7 +7,7 @@ project(data_collect)
 find_package(catkin REQUIRED COMPONENTS
   openni_tracker
   roscpp
-  roscpp
+  rosbag
   tf
 )
 
