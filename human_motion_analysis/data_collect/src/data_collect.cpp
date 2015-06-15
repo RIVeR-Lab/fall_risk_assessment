@@ -15,7 +15,7 @@ int main(int argc, char **argv)
 
   ros::init(argc, argv, "collect");
   ros::NodeHandle n;
-  rosbag::Bag bag("skelData/test.bag", rosbag::bagmode::Write);
+  rosbag::Bag bag("/home/turtlebot/skelData/test.bag", rosbag::bagmode::write);
   ros::Rate loop_rate(10);
 
   ros::Publisher activity_pub = n.advertise<std_msgs::String>("skeleton_data", 1000);
