@@ -18,7 +18,6 @@ xn::UserGenerator  g_UserGenerator;
 
 XnBool g_bNeedPose   = FALSE;
 XnChar g_strPose[20] = "";
-XnStatus status;
 
 void XN_CALLBACK_TYPE User_NewUser(xn::UserGenerator& generator, XnUserID nId, void* pCookie) {
 	ROS_INFO("New User %d", nId);
@@ -26,8 +25,7 @@ void XN_CALLBACK_TYPE User_NewUser(xn::UserGenerator& generator, XnUserID nId, v
 	if (g_bNeedPose)
 		g_UserGenerator.GetPoseDetectionCap().StartPoseDetection(g_strPose, nId);
 	else
-        status = g_UserGenerator.GetSkeletonCap().RequestCalibration(nId, TRUE);
-    ROS_INFO("Status of requestcalibration is %d", status);
+		g_UserGenerator.GetSkeletonCap().RequestCalibration(nId, TRUE);
 }
 
 void XN_CALLBACK_TYPE User_LostUser(xn::UserGenerator& generator, XnUserID nId, void* pCookie) {
