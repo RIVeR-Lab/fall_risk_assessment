@@ -1,0 +1,7 @@
+<launch>
+
+
+<node name="predict" pkg="activity_predict" type="predict.py"  />
+<node name="activity_visualise" pkg="activity_visualise" type="activity_visualise"  />
+
+</launch>
