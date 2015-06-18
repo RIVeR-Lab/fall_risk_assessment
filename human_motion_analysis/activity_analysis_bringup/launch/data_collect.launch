@@ -1,7 +1,6 @@
 <launch>
 
 <include file="$(find openni_launch)/launch/openni.launch"/>
-<node name="openni_tracker" pkg="openni_tracker" type="openni_tracker" output="screen" required="true"/>
-<node name="record" pkg="rosbag"  type="record" args="-O skeleton.bag /tf /camera/rgb/image_color" output="screen"/>
+<node name="record" pkg="rosbag"  type="record" args="-O ~/Desktop/skelData/skeleton.bag /tf /camera/rgb/image_color" output="screen"/>
 
 </launch>
