@@ -200,7 +200,7 @@ int main(int argc, char **argv) {
 
         ros::NodeHandle pnh("~");
         string frame_id("openni_depth_frame");
-        pnh.getParam("camera_depth_frame", frame_id);
+        pnh.getParam("camera_frame_id", frame_id);
 
 	while (ros::ok()) {
 		g_Context.WaitAndUpdateAll();
