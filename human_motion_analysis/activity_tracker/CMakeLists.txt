@@ -1,15 +1,19 @@
 cmake_minimum_required(VERSION 2.8.3)
 project(activity_tracker)
 
+
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
   roscpp
+roslib
   std_msgs
   openni_tracker
   tf
 )
+
+
 
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
@@ -111,7 +115,7 @@ add_executable(activity_tracker src/activity_tracker.cpp)
 # add_dependencies(activity_tracker_node activity_tracker_generate_messages_cpp)
 
 ## Specify libraries to link a library or executable target against
-target_link_libraries(activity_tracker
+target_link_libraries(activity_tracker yaml-cpp
    ${catkin_LIBRARIES}
  )
 
