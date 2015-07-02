@@ -34,7 +34,7 @@ int main(int argc, char **argv)
         ss << count;
 
         // for(int i=0; i<4; i++){
-        //     try{
+            try{
 
                 tf::StampedTransform transform;
                 listener.lookupTransform(legFrames[1], legFrames[3], ros::Time(0), transform);
@@ -51,7 +51,7 @@ int main(int argc, char **argv)
                      << transform.getOrigin().getZ()<<" , ";
 
 
-                 tf::StampedTransform transform;
+                //  tf::StampedTransform transform;
                  listener.lookupTransform(armFrames[0], armFrames[1], ros::Time(0), transform);
 
                    ss << " , "<<"elbowR:"<<" , "
