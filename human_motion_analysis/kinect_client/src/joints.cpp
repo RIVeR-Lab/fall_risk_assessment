@@ -59,8 +59,9 @@ int main(int argc, char** argv)
 
   tf::TransformBroadcaster br;
   tf::Transform transform;
-  int count1 = 0;
-  int count2 = 0;
+
+  ros::Rate loop_rate(30);
+
 
   if( myClient.Connect() == 0 )
     {
@@ -69,7 +70,6 @@ int main(int argc, char** argv)
 
       while (numbytes != 0 && ros::ok())
 	{
-    count1++;
 	  numbytes = recv(myClient.s,buf,MAXDATASIZE-1,0);
 
 	  buf[numbytes]='\0';
@@ -100,27 +100,12 @@ int main(int argc, char** argv)
     std::vector<std::vector<double> > QZ (6, qz);
     std::vector<std::vector<double> > QW (6, qw);
 
-	  // No need anymore, but commented out just in case
-
-
-
-	  // No need anymore, but commented out just in  case
-	  // std::vector<std::vector<double> > QX (6, qx);
-	  // std::vector<std::vector<double> > QY (6, qy);
-	  // std::vector<std::vector<double> > QZ (6, qz);
-	  // std::vector<std::vector<double> > QW (6, qw);
-
 	  int j;
 	  int count = 6;
 	  int id;
 
-	  // std::vector<double> orX (6, 0.0);
-	  // std::vector<double> orY (6, 0.0);
-	  // std::vector<double> orZ (6, 0.0);
-	  // std::vector<double> orW (6, 0.0);
-
 	  std::vector<int> foundIdx;
-    std::string frame = "KinectV2_Person";
+    std::string frame;
     std::string joint;
 
       /* code */
@@ -129,7 +114,7 @@ int main(int argc, char** argv)
 	    {
       // joint = "joint_";
       iss >> attribute;
-      count2++;
+      frame = "person_";
 
 	      if( strcmp(attribute.c_str(), "count:") == 0 )
 		{
@@ -186,16 +171,69 @@ int main(int argc, char** argv)
 
 
       }
-// std::cout << "c1 : " << count1 << " c2 : " << count2 << std::endl;
-  for(int i = 0; i < j; i++){
+
+
+
+
+  for(int i = 0; i < j +1 ; i++){
       joint = "joint_";
       joint.append(boost::lexical_cast<std::string>(i));
       // std::cout<<"joint: "<<joint<<std::endl;
+
+      // tf::Transform change_frame;
+      // change_frame.setOrigin(tf::Vector3(0, 0, 0));
+      // tf::Quaternion frame_rotation;
+      // frame_rotation.setEulerZYX(1.5708, 0, 1.5708);
+      // change_frame.setRotation(frame_rotation);
+      // transform = change_frame * transform;
+
+      // kinect v2 doesn't give end point rotations.
+
+      if (i == 3) {
+        QX[id][i] = QX[id][2];
+        QY[id][i] = QY[id][2];
+        QZ[id][i] = QZ[id][2];
+        QW[id][i] = QW[id][2];
+      }
+
+      if (i == 15) {
+        QX[id][i] = QX[id][14];
+        QY[id][i] = QY[id][14];
+        QZ[id][i] = QZ[id][14];
+        QW[id][i] = QW[id][14];
+      }
+
+      if (i == 19) {
+        QX[id][i] = QX[id][18];
+        QY[id][i] = QY[id][18];
+        QZ[id][i] = QZ[id][18];
+        QW[id][i] = QW[id][18];
+      }
+
+      if (i == 21 || i == 22) {
+        QX[id][i] = QX[id][7];
+        QY[id][i] = QY[id][7];
+        QZ[id][i] = QZ[id][7];
+        QW[id][i] = QW[id][7];
+      }
+
+      if (i == 23 || i == 24) {
+        QX[id][i] = QX[id][11];
+        QY[id][i] = QY[id][11];
+        QZ[id][i] = QZ[id][11];
+        QW[id][i] = QW[id][11];
+      }
+
+
+
       transform.setOrigin( tf::Vector3(X[id][i], Y[id][i], Z[id][i]) );
       transform.setRotation( tf::Quaternion(QX[id][i], QY[id][i], QZ[id][i], QW[id][i]));
-      br.sendTransform(tf::StampedTransform(transform, ros::Time::now(), frame, joint));
+      br.sendTransform(tf::StampedTransform(transform, ros::Time::now(), "kinect_sensor", joint));
 
 }
+
+ros::spinOnce();
+loop_rate.sleep();
 
 	}
 
