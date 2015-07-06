@@ -59,6 +59,8 @@ int main(int argc, char** argv)
 
   tf::TransformBroadcaster br;
   tf::Transform transform;
+  int count1 = 0;
+  int count2 = 0;
 
   if( myClient.Connect() == 0 )
     {
@@ -67,7 +69,7 @@ int main(int argc, char** argv)
 
       while (numbytes != 0 && ros::ok())
 	{
-
+    count1++;
 	  numbytes = recv(myClient.s,buf,MAXDATASIZE-1,0);
 
 	  buf[numbytes]='\0';
@@ -119,17 +121,20 @@ int main(int argc, char** argv)
 
 	  std::vector<int> foundIdx;
     std::string frame = "KinectV2_Person";
-    std::string joint = "joint_";
+    std::string joint;
+
+      /* code */
 
 	  while(!iss.eof())
 	    {
-
-	      iss >> attribute;
+      // joint = "joint_";
+      iss >> attribute;
+      count2++;
 
 	      if( strcmp(attribute.c_str(), "count:") == 0 )
 		{
 		  iss >> count;
-		  //ROS_INFO("count %d",count);
+		  // ROS_INFO("count %d",count);
 		}
 	      else if( strcmp(attribute.c_str(), "id:") == 0 )
 		{
@@ -142,7 +147,8 @@ int main(int argc, char** argv)
 	      else if( strcmp(attribute.c_str(), "joint:") == 0 )
 		{
 		  iss >> j;
-      joint += boost::lexical_cast<std::string>(j);
+      //std::cout<<"found joint "<<j<<std::endl;
+      // joint.append(boost::lexical_cast<std::string>(j));
       // joint.append(boost::lexical_cast<std::string>(j));
 		  // ROS_INFO("joint %d",j);
 		}
@@ -175,18 +181,21 @@ int main(int argc, char** argv)
         else if( strcmp(attribute.c_str(), "qw:") == 0 )
         	{
         	  iss >> QW[id][j];
+
         	}
 
 
-
-
-	    }
-      std::cout << joint;
-      transform.setOrigin( tf::Vector3(X[id][j], Y[id][j], Z[id][j]) );
-      transform.setRotation( tf::Quaternion(QX[id][j], QY[id][j], QZ[id][j], QW[id][j]));
+      }
+// std::cout << "c1 : " << count1 << " c2 : " << count2 << std::endl;
+  for(int i = 0; i < j; i++){
+      joint = "joint_";
+      joint.append(boost::lexical_cast<std::string>(i));
+      // std::cout<<"joint: "<<joint<<std::endl;
+      transform.setOrigin( tf::Vector3(X[id][i], Y[id][i], Z[id][i]) );
+      transform.setRotation( tf::Quaternion(QX[id][i], QY[id][i], QZ[id][i], QW[id][i]));
       br.sendTransform(tf::StampedTransform(transform, ros::Time::now(), frame, joint));
 
-
+}
 
 	}
 
