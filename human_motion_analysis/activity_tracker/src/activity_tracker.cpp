@@ -21,8 +21,10 @@ int main(int argc, char **argv)
 
     tf::TransformListener listener;
     std::string openni_depth_frame;
-    std::string legFrames[]={"/left_knee_1","/left_foot_1","/right_knee_1","/right_foot_1" };
-    std::string armFrames[]={"right_elbow_1", "left_elbow_1", "right_hand_1", "left_hand_1"};
+    // std::string legFrames[]={"/left_knee_1","/left_foot_1","/right_knee_1","/right_foot_1" };
+    // std::string armFrames[]={"right_elbow_1", "left_elbow_1", "right_hand_1", "left_hand_1"};
+    std::string legFrames[]={"/joint_13","/joint_14","/joint_17","/joint_18" }; // KneeLeft, AnkleLeft, KneeRight, AnkleRight
+    std::string armFrames[]={"joint_5", "joint_9", "joint_7", "joint_11"};
 
     n.getParam("camera_frame_id", openni_depth_frame);
     ROS_INFO("%s", openni_depth_frame.c_str());
