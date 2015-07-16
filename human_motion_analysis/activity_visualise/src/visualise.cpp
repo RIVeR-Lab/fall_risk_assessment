@@ -34,8 +34,12 @@ public:
 
     // Subscrive to input video feed and publish output video feed
    activityState_sub_ = nh_.subscribe("/activity_state", 1, &ImageConverter::getAct, this);
+<<<<<<< HEAD
   //  image_sub_ = it_.subscribe("/camera/rgb/image_raw", 1, &ImageConverter::imageCb, this);
    image_sub_ = it_.subscribe("/camera/rgb/image",1,&ImageConverter::imageCb,this,image_transport::TransportHints("compressed"));
+=======
+   image_sub_ = it_.subscribe("/camera/rgb/image/", 1, &ImageConverter::imageCb, this);
+>>>>>>> f7957ee6c009d64c054b40b39881c8ab80d8a8a9
    image_pub_ = it_.advertise("/activity_visualise/output_video", 1);
 
     cv::namedWindow(OPENCV_WINDOW);
