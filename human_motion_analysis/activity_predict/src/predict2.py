@@ -4,7 +4,7 @@
 import rospy
 import rospkg
 import tf
-from std_msgs.msg import Int8
+from std_msgs.msg import Int8, String
 
 # scikit libs
 import numpy as np
@@ -15,8 +15,8 @@ from sklearn.externals import joblib
 import const
 
 
-reference_frame = '/right_foot'
-targetFrames = ('/head', '/right_hip', '/torso', '/left_foot')
+reference_frame = '/tracker/right_foot'
+targetFrames = ('/tracker/head', '/tracker/right_hip', '/tracker/torso', '/tracker/left_foot')
 test_features = np.zeros((3, 7))
 features = np.zeros(21)
 
@@ -51,17 +51,19 @@ def predict(features):
     return activity
 
 
+def idCb(data):
+    rospy.loginfo(rospy.get_caller_id() + "I heard %s", data.data)
+
 if __name__ == '__main__':
     rospy.init_node('activity_predict')
     listener = tf.TransformListener()
     counter = 0
 
-
-
     pub = rospy.Publisher('activity_state', Int8, queue_size=10)
+
     while not rospy.is_shutdown():
         try:
-
+            rospy.Subscriber("chatter", String, idCb)
             (trans, rot) = listener.lookupTransform(reference_frame, targetFrames[0], rospy.Time(0))
             test_features[0] = trans + rot
             (trans, rot) = listener.lookupTransform(reference_frame, targetFrames[1], rospy.Time(0))
