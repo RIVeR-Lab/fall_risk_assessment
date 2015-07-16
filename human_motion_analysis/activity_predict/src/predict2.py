@@ -15,8 +15,8 @@ from sklearn.externals import joblib
 import const
 
 
-reference_frame = '/right_foot'
-targetFrames = ('/head', '/right_hip', '/torso', '/left_foot')
+reference_frame = '/tracker/user_1/right_foot'
+targetFrames = ('/tracker/user_1/head', '/tracker/user_1/right_hip', '/tracker/user_1/torso', '/tracker/user_1/left_foot')
 test_features = np.zeros((3, 7))
 features = np.zeros(21)
 
