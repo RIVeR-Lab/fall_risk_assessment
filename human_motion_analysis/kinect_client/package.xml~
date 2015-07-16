@@ -1,0 +1,33 @@
+<package>
+  <name>kinect_client</name>
+  <version>0.0.1</version>
+  <description>
+  This package connects to a Kinect server and retrieves data.
+  </description>
+  <maintainer email="bsuay@">Bener Suay</maintainer>
+  <license>TBD</license>
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <build_depend>roscpp</build_depend>
+  <build_depend>std_msgs</build_depend>
+  <build_depend>visualization_msgs</build_depend>
+  <build_depend>tf</build_depend>
+  <build_depend>rosconsole</build_depend>
+  <build_depend>rostime</build_depend>
+  <build_depend>pcl_ros</build_depend>
+  <build_depend>opencv</build_depend>
+  <build_depend>image_transport</build_depend>
+  <build_depend>cv_bridge</build_depend>
+
+  <run_depend>roscpp</run_depend>
+  <run_depend>std_msgs</run_depend>
+  <run_depend>visualization_msgs</run_depend>
+  <run_depend>tf</run_depend>
+  <run_depend>rosconsole</run_depend>
+  <run_depend>rostime</run_depend>
+  <run_depend>pcl_ros</run_depend>
+  <run_depend>opencv</run_depend>
+  <run_depend>cv_bridge</run_depend>
+  <run_depend>image_transport</run_depend>
+
+</package>
