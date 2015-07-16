@@ -15,13 +15,10 @@ from sklearn.externals import joblib
 import const
 
 
-<<<<<<< HEAD
+
 reference_frame = '/tracker/right_foot'
 targetFrames = ('/tracker/head', '/tracker/right_hip', '/tracker/torso', '/tracker/left_foot')
-=======
-reference_frame = '/tracker/user_1/right_foot'
-targetFrames = ('/tracker/user_1/head', '/tracker/user_1/right_hip', '/tracker/user_1/torso', '/tracker/user_1/left_foot')
->>>>>>> f7957ee6c009d64c054b40b39881c8ab80d8a8a9
+
 test_features = np.zeros((3, 7))
 features = np.zeros(21)
 
