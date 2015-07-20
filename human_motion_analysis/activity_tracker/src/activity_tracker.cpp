@@ -26,10 +26,6 @@ int main(int argc, char **argv)
 
     tf::TransformListener listener;
     std::string openni_depth_frame;
-    // std::string legFrames[]={"/left_knee_1","/left_foot_1","/right_knee_1","/right_foot_1" };
-    // std::string armFrames[]={"right_elbow_1", "left_elbow_1", "right_hand_1", "left_hand_1"};
-    std::string legFrames[]={"/joint_13","/joint_14","/joint_17","/joint_18" }; // KneeLeft, AnkleLeft, KneeRight, AnkleRight
-    std::string armFrames[]={"joint_5", "joint_9", "joint_7", "joint_11"};
 
     std::string dir = ros::package::getPath("activity_tracker");
     std::string file_path = dir+std::string("/conf/frames.cfg");
@@ -57,7 +53,6 @@ int main(int argc, char **argv)
     while (ros::ok())
     {
         std_msgs::String msg;
-
         for(unsigned j=0; j<reference_frame.size(); j++){
             std::stringstream ss;
             ss << count;
@@ -82,55 +77,6 @@ int main(int argc, char **argv)
             msg.data = ss.str();
             activity_pub.publish(msg);
         }
-
-        std::stringstream ss;
-        ss << count;
-
-        // for(int i=0; i<4; i++){
-            try{
-
-                tf::StampedTransform transform;
-                listener.lookupTransform(legFrames[1], legFrames[3], ros::Time(0), transform);
-
-                  ss << " , "<<"feetR:"<<" , "
-                     << transform.getRotation().getX()<<" , "
-                     << transform.getRotation().getY()<<" , "
-                     << transform.getRotation().getZ()<<" , "
-                     << transform.getRotation().getW();
-
-                  ss << " , "<<"feetD:"<<" , "
-                     << transform.getOrigin().getX()<<" , "
-                     << transform.getOrigin().getY()<<" , "
-                     << transform.getOrigin().getZ()<<" , ";
-
-
-                //  tf::StampedTransform transform;
-                 listener.lookupTransform(armFrames[0], armFrames[1], ros::Time(0), transform);
-
-                   ss << " , "<<"elbowR:"<<" , "
-                      << transform.getRotation().getX()<<" , "
-                      << transform.getRotation().getY()<<" , "
-                      << transform.getRotation().getZ()<<" , "
-                      << transform.getRotation().getW();
-
-
-                   ss << " , "<<"elbowD:"<<" , "
-                      << transform.getOrigin().getX()<<" , "
-                      << transform.getOrigin().getY()<<" , "
-                      << transform.getOrigin().getZ()<<" , ";
-
-		  }
-
-            catch (tf::TransformException ex){
-                ROS_ERROR("%s",ex.what());
-                ros::Duration(1.0).sleep();
-            }
-
-
-
-        msg.data = ss.str();
-        activity_pub.publish(msg);
-
         ros::spinOnce();
         loop_rate.sleep();
         ++count;
@@ -138,3 +84,4 @@ int main(int argc, char **argv)
 
     return 0;
 }
+
