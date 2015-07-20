@@ -1,0 +1,14 @@
+Features:
+1: total duration of the test (from "go" command until person sits)
+2: total number of steps
+3: average of the step distance in x axes
+4: average of the step distance in y axes
+5: average of the step distance in z axes (how much person is lifting his food from ground)
+6: average of the elbow distance x axes
+
+
+7: average knee angle (R/L)
+8: average hip angle (R/L)
+9: average elbow angle (R/L)
+
+
