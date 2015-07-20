@@ -39,7 +39,7 @@ def learn():
 
 
 if __name__ == '__main__':
-    rospy.init_node('activity_model')
+    rospy.init_node('learn')
     try:
         learn()
         rospy.loginfo("Learning is completed!")

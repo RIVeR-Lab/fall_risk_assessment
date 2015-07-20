@@ -2,6 +2,7 @@
 
 #### Folder Organization
 + tug_test: ROS package that provides ros nodes to learn a model, predict sitting/standing positions, visualize the output video, and log tranforms between joints
+>>>>>>> origin/master
 + feature_extraction: extracting features for tug test learning
 + kinect_client: getting data streams from Kinect V2 via Windows
 + openni_tracker: skeleton tracker for openni 1 (kinect 360)
