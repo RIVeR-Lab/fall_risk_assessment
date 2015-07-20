@@ -27,7 +27,7 @@ int main(int argc, char **argv)
     tf::TransformListener listener;
     std::string openni_depth_frame;
 
-    std::string dir = ros::package::getPath("tf_logger");
+    std::string dir = ros::package::getPath("tug_test");
     std::string file_path = dir+std::string("/conf/frames.cfg");
     std::ifstream fin(file_path.c_str());
     if (fin.fail()) {
@@ -84,4 +84,3 @@ int main(int argc, char **argv)
 
     return 0;
 }
-
