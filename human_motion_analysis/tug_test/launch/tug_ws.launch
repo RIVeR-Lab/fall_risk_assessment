@@ -1,0 +1,15 @@
+<!-- -->
+
+<launch>
+
+  <node name="visualize" pkg="tug_test" type="visualize"  />
+
+  <!-- Following script is used for predicting activity from openni_tracker node-->
+  <node name="predict" pkg="tug_test" type="predict.py"  output="screen"/>
+
+  <!-- Skeleton tracker package publishes tf to different topic_prefix. use the following line when using skeleton_tracker instead of openni_tracker -->
+  <!--
+  <node name="predict" pkg="tug_test" type="predict2.py"  output="screen"/>
+  -->
+
+</launch>

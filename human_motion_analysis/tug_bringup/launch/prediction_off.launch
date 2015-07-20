@@ -1,8 +1,0 @@
-<launch>
-
-<node name="activity_visualise" pkg="activity_visualise" type="activity_visualise"  output="screen"/>
-<node name="predict" pkg="activity_predict" type="predict.py"  />
-<node pkg="rosbag" type="play" name="player" args="/media/riverlab-tarik/Backup/fallRiskAssesment_rosbags/person2/sit_stand2.bag"/>
-
-
-</launch>
