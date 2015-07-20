@@ -52,7 +52,7 @@ def predict(features):
 
 
 if __name__ == '__main__':
-    rospy.init_node('activity_predict')
+    rospy.init_node('predict')
     listener = tf.TransformListener()
     counter = 0
 
