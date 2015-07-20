@@ -1,0 +1,8 @@
+<launch>
+
+<include file="$(find turtlebot_bringup)/launch/minimal.launch"/>
+<include file="$(find skeleton_tracker)/launch/tracker.launch" output="screen"/>
+<include file="$(find rbx1_apps)/launch/tug_follower.launch" output="screen"/>
+
+
+</launch>
