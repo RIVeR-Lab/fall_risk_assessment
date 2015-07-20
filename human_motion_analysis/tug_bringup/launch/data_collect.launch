@@ -1,6 +1,0 @@
-<launch>
-
-<include file="$(find openni_launch)/launch/openni.launch"/>
-<node name="record" pkg="rosbag"  type="record" args="-O ~/Desktop/skelData/skeleton.bag /tf /camera/rgb/image_color" output="screen"/>
-
-</launch>
