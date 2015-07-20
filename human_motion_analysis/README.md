@@ -14,3 +14,15 @@ tug_test package defines several rosnodes to allow performing the tug test remot
 + perdict2.py: Same as predict.py for use with skeleton_tracker based off of OpenNI2.
 + visualize: This node displays a video of the person taking the tug_test with a timer for the test.
 + tf_logger: this node outputs tf transforms for all the joints mentioned in the config file conf/frames.cfg
+
+####Test Execution
+
+On Turtlebot:
+```
+roslaunch tug_test tug_robot.launch
+```
+
+On Workstation:
+```
+roslaunch tug_test tug_ws.launch
+```
