@@ -6,11 +6,17 @@ import matplotlib.pyplot as plt
 
 
 # load data
-f = open("fullTest1.csv")
-# f = open("../../Kinect_Dataset/fulltest/kinectv2_txts/ep4.txt")
+# f = open("fullTest1.csv")
+f = open("/media/riverlab-tarik/Backup/fallRiskAssesment_rosbags/full_test/tf_logs/vinayak/vinayak_ep1.csv")
+f.readline()
+f.readline()
+f.readline()
 db_raw = np.genfromtxt(f, delimiter=",")
 
 # preprocess data
+
+index = db_raw[:,1]
+
 feetD_x = db_raw[:,7]
 feetD_y = db_raw[:,8]
 feetD_z = db_raw[:,9]
@@ -21,8 +27,8 @@ feetD_z_abs = np.absolute(db_raw[:,9])
 
 feetD_z_csp = sig.cspline1d(feetD_z, 10)
 # feetD_z_qsp = sig.cubic(feetD_z)
-feetD_z_med = sig.medfilt(feetD_z, kernel_size=13)
-feetD_z_wiener = sig.wiener(feetD_z, mysize=23, noise=0.2)
+# feetD_z_med = sig.medfilt(feetD_z, kernel_size=13)
+# feetD_z_wiener = sig.wiener(feetD_z, mysize=23, noise=0.2)
 # feetD_z_savgol = sig.savgol_filter(feetD_z, 5, 2)
 
 
