@@ -55,7 +55,7 @@ int main(int argc, char **argv)
         std_msgs::String msg;
         for(unsigned j=0; j<reference_frame.size(); j++){
             std::stringstream ss;
-            ss << count;
+            ss<<"," << count;
             ss<<","<<reference_frame[j];
             for(unsigned i=0; i<target_frames.size(); i++){
                 try{
