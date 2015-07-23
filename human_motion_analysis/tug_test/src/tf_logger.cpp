@@ -15,9 +15,6 @@ void activityCallback(const std_msgs::String::ConstPtr& msg)
 int main(int argc, char **argv)
 {
 
-    YAML::Emitter out;
-    std::ofstream fout("file.yaml"); // take this file name as an argument
-
     typedef std::vector<std::string> frames;
     ros::init(argc, argv, "tf_logger");
     ros::NodeHandle n;
@@ -53,69 +50,33 @@ int main(int argc, char **argv)
     }
 
     int count = 0;
-    out << YAML::BeginMap;
-
     while (ros::ok())
     {
-
         std_msgs::String msg;
         for(unsigned j=0; j<reference_frame.size(); j++){
-            // std::stringstream ss;
-            // ss<<"," << count;
-            // ss<<","<<reference_frame[j];
-            out << YAML::Key << "reference_frame";
-            out << YAML::Value << reference_frame[j];
-
+            std::stringstream ss;
+            ss<<"," << count;
+            ss<<","<<reference_frame[j];
             for(unsigned i=0; i<target_frames.size(); i++){
-              out << YAML::BeginMap;
-              out << YAML::Key << "target_frames";
-              out << YAML::Value << target_frames[i];
-
                 try{
-
                     tf::StampedTransform transform;
                     listener.lookupTransform(reference_frame[j], target_frames[i], ros::Time(0), transform);
-                    // ss << " , "<<target_frames[i]<<" , "<<transform.getOrigin().getX()<<" , "
-                    //    <<transform.getOrigin().getY()<<" , "
-                    //   <<transform.getOrigin().getZ()<<" , "
-                    //  <<transform.getRotation().getX()<<" , "
-                    // <<transform.getRotation().getY()<<" , "
-                    // <<transform.getRotation().getZ()<<" , "
-                    // <<transform.getRotation().getW();
-
-                      out << YAML::BeginMap;
-                      out << YAML::Key << "positions";
-                      out << YAML::Flow;
-                      out << YAML::BeginSeq << transform.getOrigin().getX() << transform.getOrigin().getY() << transform.getOrigin().getZ() << YAML::EndSeq;
-                      out << YAML::Key << "rotations";
-                      out << YAML::Flow;
-                      out << YAML::BeginSeq << transform.getRotation().getX() << transform.getRotation().getY() << transform.getRotation().getZ() << transform.getRotation().getW() << YAML::EndSeq;
-                      out << YAML::EndMap;
-                    
-
-
-                    out << YAML::EndMap;
-
+                    ss << " , "<<target_frames[i]<<" , "<<transform.getOrigin().getX()<<" , "
+                       <<transform.getOrigin().getY()<<" , "
+                      <<transform.getOrigin().getZ()<<" , "
+                     <<transform.getRotation().getX()<<" , "
+                    <<transform.getRotation().getY()<<" , "
+                    <<transform.getRotation().getZ()<<" , "
+                    <<transform.getRotation().getW();
                 }
                 catch (tf::TransformException ex){
                     ROS_ERROR("%s",ex.what());
                     ros::Duration(1.0).sleep();
-
-                  out << YAML::EndMap;
                 }
-
-
             }
-
-
-
-            // msg.data = ss.str();
-            // activity_pub.publish(msg);
-
+            msg.data = ss.str();
+            activity_pub.publish(msg);
         }
-
-        out << YAML::EndMap;
-        fout << out.c_str();
         ros::spinOnce();
         loop_rate.sleep();
         ++count;
