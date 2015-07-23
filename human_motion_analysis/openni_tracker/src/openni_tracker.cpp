@@ -20,34 +20,34 @@ XnBool g_bNeedPose   = FALSE;
 XnChar g_strPose[20] = "";
 
 void XN_CALLBACK_TYPE User_NewUser(xn::UserGenerator& generator, XnUserID nId, void* pCookie) {
-	ROS_INFO("New User %d", nId);
+    ROS_INFO("New User %d", nId);
 
-	if (g_bNeedPose)
-		g_UserGenerator.GetPoseDetectionCap().StartPoseDetection(g_strPose, nId);
-	else
-		g_UserGenerator.GetSkeletonCap().RequestCalibration(nId, TRUE);
+    if (g_bNeedPose)
+        g_UserGenerator.GetPoseDetectionCap().StartPoseDetection(g_strPose, nId);
+    else
+        g_UserGenerator.GetSkeletonCap().RequestCalibration(nId, TRUE);
 }
 
 void XN_CALLBACK_TYPE User_LostUser(xn::UserGenerator& generator, XnUserID nId, void* pCookie) {
-	ROS_INFO("Lost user %d", nId);
+    ROS_INFO("Lost user %d", nId);
 }
 
 void XN_CALLBACK_TYPE UserCalibration_CalibrationStart(xn::SkeletonCapability& capability, XnUserID nId, void* pCookie) {
-	ROS_INFO("Calibration started for user %d", nId);
+    ROS_INFO("Calibration started for user %d", nId);
 }
 
 void XN_CALLBACK_TYPE UserCalibration_CalibrationEnd(xn::SkeletonCapability& capability, XnUserID nId, XnBool bSuccess, void* pCookie) {
-	if (bSuccess) {
-		ROS_INFO("Calibration complete, start tracking user %d", nId);
-		g_UserGenerator.GetSkeletonCap().StartTracking(nId);
-	}
-	else {
-		ROS_INFO("Calibration failed for user %d", nId);
-		if (g_bNeedPose)
-			g_UserGenerator.GetPoseDetectionCap().StartPoseDetection(g_strPose, nId);
-		else
-			g_UserGenerator.GetSkeletonCap().RequestCalibration(nId, TRUE);
-	}
+    if (bSuccess) {
+        ROS_INFO("Calibration complete, start tracking user %d", nId);
+        g_UserGenerator.GetSkeletonCap().StartTracking(nId);
+    }
+    else {
+        ROS_INFO("Calibration failed for user %d", nId);
+        if (g_bNeedPose)
+            g_UserGenerator.GetPoseDetectionCap().StartPoseDetection(g_strPose, nId);
+        else
+            g_UserGenerator.GetSkeletonCap().RequestCalibration(nId, TRUE);
+    }
 }
 
 void XN_CALLBACK_TYPE UserPose_PoseDetected(xn::PoseDetectionCapability& capability, XnChar const* strPose, XnUserID nId, void* pCookie) {
@@ -70,8 +70,8 @@ void publishTransform(XnUserID const& user, XnSkeletonJoint const& joint, string
 
     XnFloat* m = joint_orientation.orientation.elements;
     KDL::Rotation rotation(m[0], m[1], m[2],
-    					   m[3], m[4], m[5],
-    					   m[6], m[7], m[8]);
+            m[3], m[4], m[5],
+            m[6], m[7], m[8]);
     double qx, qy, qz, qw;
     rotation.GetQuaternion(qx, qy, qz, qw);
 
@@ -128,11 +128,11 @@ void publishTransforms(const std::string& frame_id) {
 }
 
 #define CHECK_RC(nRetVal, what)										\
-	if (nRetVal != XN_STATUS_OK)									\
-	{																\
-		ROS_ERROR("%s failed: %s", what, xnGetStatusString(nRetVal));\
-		return nRetVal;												\
-	}
+    if (nRetVal != XN_STATUS_OK)									\
+{																\
+    ROS_ERROR("%s failed: %s", what, xnGetStatusString(nRetVal));\
+    return nRetVal;												\
+    }
 
 int main(int argc, char **argv) {
     ros::init(argc, argv, "openni_tracker");
@@ -145,8 +145,8 @@ int main(int argc, char **argv) {
         nRetVal = g_Context.OpenFileRecording(argv[2], g_Player);
         if (nRetVal != XN_STATUS_OK)
         {
-        printf("Can't open recording %s\n", xnGetStatusString(nRetVal));
-        return 1;
+            printf("Can't open recording %s\n", xnGetStatusString(nRetVal));
+            return 1;
         }
     }
     else{
@@ -157,57 +157,57 @@ int main(int argc, char **argv) {
     nRetVal = g_Context.FindExistingNode(XN_NODE_TYPE_DEPTH, g_DepthGenerator);
     CHECK_RC(nRetVal, "Find depth generator");
 
-	nRetVal = g_Context.FindExistingNode(XN_NODE_TYPE_USER, g_UserGenerator);
-	if (nRetVal != XN_STATUS_OK) {
-		nRetVal = g_UserGenerator.Create(g_Context);
-	    if (nRetVal != XN_STATUS_OK) {
-		    ROS_ERROR("NITE is likely missing: Please install NITE >= 1.5.2.21. Check the readme for download information. Error Info: User generator failed: %s", xnGetStatusString(nRetVal));
+    nRetVal = g_Context.FindExistingNode(XN_NODE_TYPE_USER, g_UserGenerator);
+    if (nRetVal != XN_STATUS_OK) {
+        nRetVal = g_UserGenerator.Create(g_Context);
+        if (nRetVal != XN_STATUS_OK) {
+            ROS_ERROR("NITE is likely missing: Please install NITE >= 1.5.2.21. Check the readme for download information. Error Info: User generator failed: %s", xnGetStatusString(nRetVal));
             return nRetVal;
-	    }
-	}
+        }
+    }
 
-	if (!g_UserGenerator.IsCapabilitySupported(XN_CAPABILITY_SKELETON)) {
-		ROS_INFO("Supplied user generator doesn't support skeleton");
-		return 1;
-	}
+    if (!g_UserGenerator.IsCapabilitySupported(XN_CAPABILITY_SKELETON)) {
+        ROS_INFO("Supplied user generator doesn't support skeleton");
+        return 1;
+    }
 
     XnCallbackHandle hUserCallbacks;
-	g_UserGenerator.RegisterUserCallbacks(User_NewUser, User_LostUser, NULL, hUserCallbacks);
+    g_UserGenerator.RegisterUserCallbacks(User_NewUser, User_LostUser, NULL, hUserCallbacks);
 
-	XnCallbackHandle hCalibrationCallbacks;
-	g_UserGenerator.GetSkeletonCap().RegisterCalibrationCallbacks(UserCalibration_CalibrationStart, UserCalibration_CalibrationEnd, NULL, hCalibrationCallbacks);
+    XnCallbackHandle hCalibrationCallbacks;
+    g_UserGenerator.GetSkeletonCap().RegisterCalibrationCallbacks(UserCalibration_CalibrationStart, UserCalibration_CalibrationEnd, NULL, hCalibrationCallbacks);
 
-	if (g_UserGenerator.GetSkeletonCap().NeedPoseForCalibration()) {
-		g_bNeedPose = TRUE;
-		if (!g_UserGenerator.IsCapabilitySupported(XN_CAPABILITY_POSE_DETECTION)) {
-			ROS_INFO("Pose required, but not supported");
-			return 1;
-		}
+    if (g_UserGenerator.GetSkeletonCap().NeedPoseForCalibration()) {
+        g_bNeedPose = TRUE;
+        if (!g_UserGenerator.IsCapabilitySupported(XN_CAPABILITY_POSE_DETECTION)) {
+            ROS_INFO("Pose required, but not supported");
+            return 1;
+        }
 
-		XnCallbackHandle hPoseCallbacks;
-		g_UserGenerator.GetPoseDetectionCap().RegisterToPoseCallbacks(UserPose_PoseDetected, NULL, NULL, hPoseCallbacks);
+        XnCallbackHandle hPoseCallbacks;
+        g_UserGenerator.GetPoseDetectionCap().RegisterToPoseCallbacks(UserPose_PoseDetected, NULL, NULL, hPoseCallbacks);
 
-		g_UserGenerator.GetSkeletonCap().GetCalibrationPose(g_strPose);
-	}
+        g_UserGenerator.GetSkeletonCap().GetCalibrationPose(g_strPose);
+    }
 
-	g_UserGenerator.GetSkeletonCap().SetSkeletonProfile(XN_SKEL_PROFILE_ALL);
+    g_UserGenerator.GetSkeletonCap().SetSkeletonProfile(XN_SKEL_PROFILE_ALL);
 
-	nRetVal = g_Context.StartGeneratingAll();
-	CHECK_RC(nRetVal, "StartGenerating");
+    nRetVal = g_Context.StartGeneratingAll();
+    CHECK_RC(nRetVal, "StartGenerating");
 
-	ros::Rate r(30);
+    ros::Rate r(30);
 
+    ros::NodeHandle pnh("~");
+    string frame_id("camera_depth_frame");
+    pnh.getParam("camera_frame_id", frame_id);
+    ROS_INFO("Openni frame : %s", frame_id.c_str());
 
-        ros::NodeHandle pnh("~");
-        string frame_id("openni_depth_frame");
-        pnh.getParam("camera_frame_id", frame_id);
+    while (ros::ok()) {
+        g_Context.WaitAndUpdateAll();
+        publishTransforms(frame_id);
+        r.sleep();
+    }
 
-	while (ros::ok()) {
-		g_Context.WaitAndUpdateAll();
-		publishTransforms(frame_id);
-		r.sleep();
-	}
-
-	g_Context.Shutdown();
-	return 0;
+    g_Context.Shutdown();
+    return 0;
 }
