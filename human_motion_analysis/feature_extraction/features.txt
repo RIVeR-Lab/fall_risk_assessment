@@ -12,3 +12,7 @@ Features:
 9: average elbow angle (R/L)
 
 
+frame transforms:
+1: left_foot -> right_foot
+2: right_wrist -> neck
+3: left_wrist -> neck
