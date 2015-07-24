@@ -77,6 +77,9 @@ int main(int argc, char **argv)
         //store requested transforms in csv file
         for(unsigned j=0; j<reference_frame.size(); j++){
 
+            out << count;
+            out<<",\""<<reference_frame[j]<<"\"";
+
             for(unsigned i=0; i<target_frames.size(); i++){
                 try{
                     tf::StampedTransform transform;
