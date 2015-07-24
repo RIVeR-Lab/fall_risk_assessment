@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 # load data
 # f = open("fullTest1.csv")
 # f = open("/media/riverlab-tarik/Backup/fallRiskAssesment_rosbags/full_test/tf_logs/vinayak/vinayak_ep1.csv")
-f = open("/home/riverlab-tarik/Dropbox/Research/FallRiskAssesment/HumanMotionAnalysis/Kinect_Dataset/full_test/vinayak/ep2_feet.csv")
+f = open("/home/riverlab-tarik/Dropbox/Research/FallRiskAssesment/HumanMotionAnalysis/Kinect_Dataset/full_test/vinayak/ep3_feet.csv")
 f.readline()
 f.readline()
 f.readline()
