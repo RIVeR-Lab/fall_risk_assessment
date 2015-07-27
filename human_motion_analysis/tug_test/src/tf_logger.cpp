@@ -2,6 +2,7 @@
 #include <ros/package.h>
 #include <std_msgs/String.h>
 #include <tf/transform_listener.h>
+#include <tf/transform_datatypes.h>
 #include <yaml-cpp/yaml.h>
 #include <ostream>
 #include <boost/iostreams/device/file.hpp>
@@ -26,9 +27,9 @@ int main(int argc, char **argv)
     ros::Publisher activity_pub = n.advertise<std_msgs::String>("chatter", 1000);
 
     ros::Rate loop_rate(30);
-
     tf::TransformListener listener;
     std::string openni_depth_frame;
+    tfScalar roll, pitch, yaw;
 
     //Load config file
     std::string dir = ros::package::getPath("tug_test");
@@ -63,11 +64,10 @@ int main(int argc, char **argv)
         out << ",\""<<target_frames[i]<<"_X\",";
         out << "\""<<target_frames[i]<<"_Y\",";
         out << "\""<<target_frames[i]<<"_Z\",";
-
         out << "\""<<target_frames[i]<<"_AngX\",";
         out << "\""<<target_frames[i]<<"_AngY\",";
-        out << "\""<<target_frames[i]<<"_AngZ\",";
-        out << "\""<<target_frames[i]<<"_AngW\"";
+        out << "\""<<target_frames[i]<<"_AngZ\"";
+//        out << "\""<<target_frames[i]<<"_AngW\"";
     }
     out<<std::endl;
 
@@ -85,13 +85,18 @@ int main(int argc, char **argv)
                     tf::StampedTransform transform;
                     listener.waitForTransform(reference_frame[j], target_frames[i], ros::Time(0), ros::Duration(3.0));
                     listener.lookupTransform(reference_frame[j], target_frames[i], ros::Time(0), transform);
+
+                    transform.getBasis().getRPY(roll, pitch, yaw);
+
                     out <<" , "<<transform.getOrigin().getX()<<" , "
-                       <<transform.getOrigin().getY()<<" , "
-                      <<transform.getOrigin().getZ()<<" , "
-                     <<transform.getRotation().getX()<<" , "
-                    <<transform.getRotation().getY()<<" , "
-                    <<transform.getRotation().getZ()<<" , "
-                    <<transform.getRotation().getW();
+                        <<transform.getOrigin().getY()<<" , "
+                        <<transform.getOrigin().getZ()<<" , "
+                        <<roll<<" , "<<yaw<<" , "<<pitch;
+
+//                        <<transform.getRotation().getX()<<" , "
+//                        <<transform.getRotation().getY()<<" , "
+//                        <<transform.getRotation().getZ()<<" , "
+//                        <<transform.getRotation().getW();
                 }
                 catch (tf::TransformException ex){
                     ROS_ERROR("%s",ex.what());
