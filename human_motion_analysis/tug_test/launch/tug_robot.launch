@@ -9,7 +9,7 @@
 -->
 
 <!-- Use the following node for OpenNI1 tracker (Kinect Xbox 360)-->
-<include file="$(find turtlebot_follower)/launch/follower.launch" />
+<include file="$(find fallrisk_follower)/launch/follower.launch" />
 <node pkg="openni_tracker" type="openni_tracker" name="openni_tracker"/>
 
 </launch>
