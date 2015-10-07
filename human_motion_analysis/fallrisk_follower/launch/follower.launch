@@ -4,12 +4,12 @@
 <launch>
   <arg name="simulation" default="false"/>
   <group unless="$(arg simulation)"> <!-- Real robot -->
-    <include file="$(find turtlebot_follower)/launch/includes/velocity_smoother.launch.xml"/>
+    <include file="$(find fallrisk_follower)/launch/includes/velocity_smoother.launch.xml"/>
     <include file="$(find turtlebot_follower)/launch/includes/safety_controller.launch.xml"/>
 
     <param name="camera/rgb/image_color/compressed/jpeg_quality" value="22"/>
     
-    <include file="$(find turtlebot_bringup)/launch/3dsensor.launch">
+    <include file="$(find fallrisk_follower)/launch/3dsensor.launch">
       <arg name="rgb_processing"                  value="true"/>  <!-- only required if we use android client -->
       <arg name="depth_processing"                value="true"/>
       <arg name="depth_registered_processing"     value="false"/>
@@ -27,16 +27,19 @@
     <node pkg="nodelet" type="nodelet" name="turtlebot_follower"
           args="load turtlebot_follower/TurtlebotFollower camera/camera_nodelet_manager">
       <remap from="turtlebot_follower/cmd_vel" to="follower_velocity_smoother/raw_cmd_vel"/>
+
+      <!--<remap from="follower_velocity_smoother/robot_cmd_vel" to="/temp_velocity"/>-->
+
       <remap from="depth/points" to="camera/depth/points"/>
       <param name="enabled" value="true" />
-      <param name="x_scale" value="7.0" />
-      <param name="z_scale" value="2.0" />
+      <param name="x_scale" value="0.0" />
+      <param name="z_scale" value="1.1" />
       <param name="min_x" value="-0.35" />
       <param name="max_x" value="0.35" />
       <param name="min_y" value="0.1" />
       <param name="max_y" value="0.5" />
-      <param name="max_z" value="1.2" />
-      <param name="goal_z" value="0.6" />
+      <param name="max_z" value="3.0" />
+      <param name="goal_z" value="1.77" />
     </node>
   </group>
   <group if="$(arg simulation)">
