@@ -6,8 +6,12 @@ project(csv_logger)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
   tf2_msgs
+  geometry_msgs
+  tf2_ros
   roscpp
   rospy
+  tf
+  roslib
 )
 
 ## System dependencies are found with CMake's conventions
@@ -82,7 +86,7 @@ find_package(catkin REQUIRED COMPONENTS
 catkin_package(
   INCLUDE_DIRS include
 #  LIBRARIES tbot_goal
-  CATKIN_DEPENDS tf2_msgs roscpp rospy
+  CATKIN_DEPENDS tf2_msgs roscpp rospy   geometry_msgs tf2_ros tf roslib
 #  DEPENDS system_lib
 )
 
@@ -164,6 +168,8 @@ include_directories(
 set(SOURCE_FILES
   src/csv_logger.cpp
 )
+
+SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 
 include_directories(include ${catkin_INCLUDE_DIRS})
 

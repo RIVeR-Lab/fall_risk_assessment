@@ -5,4 +5,4 @@ Description: Description of csv_logger
 Version: 0.0.0
 Cflags: -I/usr/local/include
 Libs: -L/usr/local/lib 
-Requires: std_msgs roscpp rospy
+Requires: tf2_msgs roscpp rospy geometry_msgs tf2_ros tf roslib

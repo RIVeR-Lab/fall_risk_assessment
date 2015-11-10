@@ -153,7 +153,7 @@ foreach(t ${csv_logger_EXPORTED_TARGETS})
   endif()
 endforeach()
 
-set(depends "std_msgs;roscpp;rospy")
+set(depends "tf2_msgs;roscpp;rospy;geometry_msgs;tf2_ros;tf;roslib")
 foreach(depend ${depends})
   string(REPLACE " " ";" depend_list ${depend})
   # the package name of the dependency must be kept in a unique variable so that it is not overwritten in recursive calls

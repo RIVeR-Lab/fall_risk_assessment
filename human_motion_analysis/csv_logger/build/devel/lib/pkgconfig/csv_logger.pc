@@ -5,4 +5,4 @@ Description: Description of csv_logger
 Version: 0.0.0
 Cflags: -I/home/apoorv/catkin_ws/src/fall_risk_assessment/human_motion_analysis/csv_logger/include
 Libs: -L/home/apoorv/catkin_ws/src/fall_risk_assessment/human_motion_analysis/csv_logger/build/devel/lib 
-Requires: std_msgs roscpp rospy
+Requires: tf2_msgs roscpp rospy geometry_msgs tf2_ros tf roslib
