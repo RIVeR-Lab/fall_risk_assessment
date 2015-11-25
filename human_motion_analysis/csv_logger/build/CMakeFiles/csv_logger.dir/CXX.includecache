@@ -29,6 +29,8 @@ array
 -
 string
 -
+math.h
+-
 
 /opt/ros/indigo/include/XmlRpcDecl.h
 ros/macros.h

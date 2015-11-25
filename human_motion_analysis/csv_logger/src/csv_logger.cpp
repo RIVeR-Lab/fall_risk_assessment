@@ -9,6 +9,7 @@
 #include <fstream>
 #include <array>
 #include <string>
+#include <math.h>
 
 using namespace std;
 
@@ -41,12 +42,14 @@ int main(int argc, char **argv)
     myfile<<"TARGET FRAMES,";
     for(int i=0;i<no_transforms;i++)
     {
-        myfile<<" , , ,"+ target_frames[i]+" , , , ,";
+        //myfile<<" , , ,"+ target_frames[i]+" , , , ,";
+        myfile<<" , , ,"+ target_frames[i]+" , , , ";
     }
     myfile<<"\n ,";
     for(int i=0;i<no_transforms;i++)
     {
-        myfile<<"Quat_x, Quat_Y, Quat_Z, Quat_W, Dist_X, Dist_Y, Dist_Z,";
+        //myfile<<"Quat_X, Quat_Y, Quat_Z, Quat_W, Dist_X, Dist_Y, Dist_Z,";
+        myfile<<"Rotation_X, Rotation_Y, Rotation_Z, Dist_X, Dist_Y, Dist_Z,";
     }
     myfile<<endl;
     /*------------------------------------------------------------------------------------------------*/
@@ -79,18 +82,21 @@ int main(int argc, char **argv)
 
         tf::Quaternion q(transform[0].getRotation().getX(), transform[0].getRotation().getY(),
                          transform[0].getRotation().getZ(), transform[0].getRotation().getW());
+        //tf::Quaternion q(0.0140461, -0.253738,
+        //                        0.611603, 0.749241);
         tf::Matrix3x3 m(q);
 
 
         m.getRPY(roll, pitch, yaw);
         //std::cout << "Roll: " << roll << ", Pitch: " << pitch << ", Yaw: " << yaw << std::endl;
-        ROS_INFO("roll =[%f]", roll);
-        ROS_INFO("pitch =[%f]", pitch);
-        ROS_INFO("yaw =[%f]", yaw);
+        ROS_INFO("roll_x =[%f]", roll*(180/M_PI));
+        ROS_INFO("pitch_y =[%f]", pitch*(180/M_PI));
+        ROS_INFO("yaw_z =[%f]", yaw*(180/M_PI));
 
         //Writing transforms to the file
         /*------------------------------------------------------------------------------------------------*/
         myfile<<" ,";
+        /*
         for(int i=0; i < no_transforms; i++)
         {
             myfile<<transform[i].getRotation().getX()<<","<<transform[i].getRotation().getY()<<","<<
@@ -98,7 +104,14 @@ int main(int argc, char **argv)
                     transform[i].getOrigin().getX()<<","<<transform[i].getOrigin().getY()<<","<<
                     transform[i].getOrigin().getZ()<<",";
         }
-
+        */
+        for(int i=0; i < no_transforms; i++)
+        {
+            myfile<<roll*(180/M_PI)<<","<<pitch*(180/M_PI)<<","<<
+                    yaw*(180/M_PI)<<","<<
+                    transform[i].getOrigin().getX()<<","<<transform[i].getOrigin().getY()<<","<<
+                    transform[i].getOrigin().getZ()<<",";
+        }
         myfile<<endl;
         /*------------------------------------------------------------------------------------------------*/
 
