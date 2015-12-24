@@ -87,6 +87,16 @@
             <DistClean command="/usr/bin/make -f &quot;/home/apoorv/catkin_ws/src/fall_risk_assessment/human_motion_analysis/csv_logger/build/Makefile&quot;  VERBOSE=1 clean" />
          </MakeCommands>
       </Target>
+      <Target title="clean_test_results_csv_logger">
+         <Option working_dir="/home/apoorv/catkin_ws/src/fall_risk_assessment/human_motion_analysis/csv_logger/build" />
+         <Option type="4" />
+         <MakeCommands>
+            <Build command="/usr/bin/make -f &quot;/home/apoorv/catkin_ws/src/fall_risk_assessment/human_motion_analysis/csv_logger/build/Makefile&quot;  VERBOSE=1 clean_test_results_csv_logger" />
+            <CompileFile command="/usr/bin/make -f &quot;/home/apoorv/catkin_ws/src/fall_risk_assessment/human_motion_analysis/csv_logger/build/Makefile&quot;  VERBOSE=1 &quot;$file&quot;" />
+            <Clean command="/usr/bin/make -f &quot;/home/apoorv/catkin_ws/src/fall_risk_assessment/human_motion_analysis/csv_logger/build/Makefile&quot;  VERBOSE=1 clean" />
+            <DistClean command="/usr/bin/make -f &quot;/home/apoorv/catkin_ws/src/fall_risk_assessment/human_motion_analysis/csv_logger/build/Makefile&quot;  VERBOSE=1 clean" />
+         </MakeCommands>
+      </Target>
       <Target title="csv_logger">
          <Option output="/home/apoorv/catkin_ws/src/fall_risk_assessment/human_motion_analysis/csv_logger/build/devel/lib/csv_logger/csv_logger" prefix_auto="0" extension_auto="0" />
          <Option working_dir="/home/apoorv/catkin_ws/src/fall_risk_assessment/human_motion_analysis/csv_logger/build/devel/lib/csv_logger" />

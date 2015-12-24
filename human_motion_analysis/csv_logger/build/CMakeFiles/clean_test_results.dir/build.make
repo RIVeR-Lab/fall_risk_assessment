@@ -46,7 +46,7 @@ CMAKE_BINARY_DIR = /home/apoorv/catkin_ws/src/fall_risk_assessment/human_motion_
 include CMakeFiles/clean_test_results.dir/progress.make
 
 CMakeFiles/clean_test_results:
-	/usr/bin/cmake -E remove_directory /home/apoorv/catkin_ws/src/fall_risk_assessment/human_motion_analysis/csv_logger/build/test_results
+	/usr/bin/python /opt/ros/indigo/share/catkin/cmake/test/remove_test_results.py /home/apoorv/catkin_ws/src/fall_risk_assessment/human_motion_analysis/csv_logger/build/test_results
 
 clean_test_results: CMakeFiles/clean_test_results
 clean_test_results: CMakeFiles/clean_test_results.dir/build.make

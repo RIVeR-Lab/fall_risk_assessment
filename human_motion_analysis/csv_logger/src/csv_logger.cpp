@@ -22,7 +22,12 @@ int main(int argc, char **argv)
 
     string target_frames[] = {"left_elbow_1", "right_elbow_1", "left_hand_1", "right_hand_1",
                               "left_knee_1", "right_knee_1", "left_foot_1", "right_foot_1"};
-    string reference_frame = "torso_1";
+    string reference_frame = "torso_1";     //TUG
+    //string reference_frame = "left_hand_1";     //arm curl ->left elbow x
+    //string reference_frame = "left_hip_1";     //chair stand ->left foot x
+    //string reference_frame = "left_hip_1";     //high knees ->left foot x
+    //string reference_frame = "left_hand_1";     //toe touch ->left foot z distance
+
 
 
     tf::TransformListener listener;
@@ -82,12 +87,9 @@ int main(int argc, char **argv)
 
         tf::Quaternion q(transform[0].getRotation().getX(), transform[0].getRotation().getY(),
                          transform[0].getRotation().getZ(), transform[0].getRotation().getW());
-        //tf::Quaternion q(0.0140461, -0.253738,
-        //                        0.611603, 0.749241);
         tf::Matrix3x3 m(q);
-
-
         m.getRPY(roll, pitch, yaw);
+
         //std::cout << "Roll: " << roll << ", Pitch: " << pitch << ", Yaw: " << yaw << std::endl;
         ROS_INFO("roll_x =[%f]", roll*(180/M_PI));
         ROS_INFO("pitch_y =[%f]", pitch*(180/M_PI));
@@ -107,6 +109,11 @@ int main(int argc, char **argv)
         */
         for(int i=0; i < no_transforms; i++)
         {
+            tf::Quaternion q(transform[i].getRotation().getX(), transform[i].getRotation().getY(),
+                             transform[i].getRotation().getZ(), transform[i].getRotation().getW());
+            tf::Matrix3x3 m(q);
+            m.getRPY(roll, pitch, yaw);
+
             myfile<<roll*(180/M_PI)<<","<<pitch*(180/M_PI)<<","<<
                     yaw*(180/M_PI)<<","<<
                     transform[i].getOrigin().getX()<<","<<transform[i].getOrigin().getY()<<","<<

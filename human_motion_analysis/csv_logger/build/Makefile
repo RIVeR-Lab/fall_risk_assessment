@@ -241,6 +241,19 @@ clean_test_results/fast:
 .PHONY : clean_test_results/fast
 
 #=============================================================================
+# Target rules for targets named clean_test_results_csv_logger
+
+# Build rule for target.
+clean_test_results_csv_logger: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 clean_test_results_csv_logger
+.PHONY : clean_test_results_csv_logger
+
+# fast build rule for target.
+clean_test_results_csv_logger/fast:
+	$(MAKE) -f CMakeFiles/clean_test_results_csv_logger.dir/build.make CMakeFiles/clean_test_results_csv_logger.dir/build
+.PHONY : clean_test_results_csv_logger/fast
+
+#=============================================================================
 # Target rules for targets named csv_logger
 
 # Build rule for target.
@@ -641,6 +654,7 @@ help:
 	@echo "... actionlib_msgs_generate_messages_lisp"
 	@echo "... actionlib_msgs_generate_messages_py"
 	@echo "... clean_test_results"
+	@echo "... clean_test_results_csv_logger"
 	@echo "... csv_logger"
 	@echo "... download_extra_data"
 	@echo "... doxygen"

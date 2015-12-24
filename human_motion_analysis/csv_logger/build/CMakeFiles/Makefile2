@@ -270,6 +270,37 @@ clean: CMakeFiles/clean_test_results.dir/clean
 .PHONY : clean
 
 #=============================================================================
+# Target rules for target CMakeFiles/clean_test_results_csv_logger.dir
+
+# All Build rule for target.
+CMakeFiles/clean_test_results_csv_logger.dir/all:
+	$(MAKE) -f CMakeFiles/clean_test_results_csv_logger.dir/build.make CMakeFiles/clean_test_results_csv_logger.dir/depend
+	$(MAKE) -f CMakeFiles/clean_test_results_csv_logger.dir/build.make CMakeFiles/clean_test_results_csv_logger.dir/build
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/apoorv/catkin_ws/src/fall_risk_assessment/human_motion_analysis/csv_logger/build/CMakeFiles 
+	@echo "Built target clean_test_results_csv_logger"
+.PHONY : CMakeFiles/clean_test_results_csv_logger.dir/all
+
+# Build rule for subdir invocation for target.
+CMakeFiles/clean_test_results_csv_logger.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/apoorv/catkin_ws/src/fall_risk_assessment/human_motion_analysis/csv_logger/build/CMakeFiles 0
+	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/clean_test_results_csv_logger.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/apoorv/catkin_ws/src/fall_risk_assessment/human_motion_analysis/csv_logger/build/CMakeFiles 0
+.PHONY : CMakeFiles/clean_test_results_csv_logger.dir/rule
+
+# Convenience name for target.
+clean_test_results_csv_logger: CMakeFiles/clean_test_results_csv_logger.dir/rule
+.PHONY : clean_test_results_csv_logger
+
+# clean rule for target.
+CMakeFiles/clean_test_results_csv_logger.dir/clean:
+	$(MAKE) -f CMakeFiles/clean_test_results_csv_logger.dir/build.make CMakeFiles/clean_test_results_csv_logger.dir/clean
+.PHONY : CMakeFiles/clean_test_results_csv_logger.dir/clean
+
+# clean rule for target.
+clean: CMakeFiles/clean_test_results_csv_logger.dir/clean
+.PHONY : clean
+
+#=============================================================================
 # Target rules for target CMakeFiles/csv_logger.dir
 
 # All Build rule for target.
